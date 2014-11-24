@@ -15,7 +15,7 @@ CSV.foreach('trans-test.csv') do |row|
 	else
 		row << "X"
 	end
-	puts row.inspect
+	puts row.inspect #check output in console
 end
 
 #Open the PSD
