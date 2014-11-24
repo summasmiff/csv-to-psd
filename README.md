@@ -4,3 +4,5 @@ Translation documents are often delivered as CSVs with the original text in one 
 The PSD gem will export Photoshop layer data as a nested hash, including any text object layers. 
 
 Theoretically, I can directly update the text in a Photoshop document from a CSV. 
+
+Repository includes samples .csv and .psd files to test.
