@@ -20,7 +20,7 @@ end
 
 #Open the PSD
 PSD.open('trans-test.psd') do |psd|
-	hash = psd.tree.to_hash
+	hash = psd.tree.to_hash #Creates nested hash from PSD hierarchy
 	new_hash = hash.each do |k, v|
 		gsub('cat', 'dog')if v == '\"cat\"' #test str for time being
 	end
