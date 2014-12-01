@@ -16,26 +16,37 @@ require 'awesome_print'
 
 ap @csv
 #Test hash => replace with PSD hash
-@h = {:Patrick => "monkey", :Chief => "cat", :Polly => "fish", :Smaug => "dragon"}
-
-#Check test hash for matches, and change value using dictionary
-@h.each do |k, v|
-	@csv.each do |key, value|
-		if v == key && value != nil
-			@h[k] = value 
-		end
-	end
-end
-
-ap @h
-
 #Open the PSD
 #### PSD gem does not support writing to PSDs ####
 PSD.open('trans-test.psd') do |psd|
-	@psd = psd.tree.to_hash #Creates nested hash from PSD hierarchy
+	@h = psd.tree.to_hash #Creates nested hash from PSD hierarchy
 	ap "The layer's name is #{psd.tree.descendant_layers.first.name}" 
 	ap "The layer's text reads #{psd.tree.descendant_layers.first.text[:value]}" 
 end
+@test_h = {:Patrick => "monkey", :Chief => "cat", :Polly => "fish", :Smaug => "dragon"}
+
+
+#Check test hash for matches, and change value using dictionary
+
+file = ARGV[0] || 'trans-test.psd'
+psd = PSD.new(file)
+
+psd.layers.each do |layer|
+	next if layer.folder? || layer.hidden? || layer.folder_end?
+		@csv.each do |key, value|
+			if layer.name == key && value != nil
+				layer.name = value 
+			end
+			if layer.text[:value] == key && value != nil
+				layer.text[:value] = value
+			end
+		end
+end
+
+ap "The layer's new name is #{psd.tree.descendant_layers.first.name}" 
+ap "The layer's new text reads #{psd.tree.descendant_layers.first.text[:value]}" 
+
+
 
 
 
