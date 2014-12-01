@@ -14,19 +14,17 @@ require 'awesome_print'
 	end 
 ]
 
-ap @csv
 #Test hash => replace with PSD hash
 #Open the PSD
 #### PSD gem does not support writing to PSDs ####
 PSD.open('trans-test.psd') do |psd|
-	@h = psd.tree.to_hash #Creates nested hash from PSD hierarchy
 	ap "The layer's name is #{psd.tree.descendant_layers.first.name}" 
 	ap "The layer's text reads #{psd.tree.descendant_layers.first.text[:value]}" 
 end
+
 @test_h = {:Patrick => "monkey", :Chief => "cat", :Polly => "fish", :Smaug => "dragon"}
 
-
-#Check test hash for matches, and change value using dictionary
+#Check PSD for matches, and change value using dictionary
 
 file = ARGV[0] || 'trans-test.psd'
 psd = PSD.new(file)
