@@ -10,38 +10,24 @@ require 'awesome_print'
 
 #csv to dictionary hash
 @csv = Hash[ CSV.read('trans-test.csv').map do |row|
-	[ row[0].to_s, row[1].to_s ] 
+	[ row[0].to_s, (row[1].to_s unless row[1] == nil) ] 
 	end 
 ]
 
-#Test hash
+ap @csv
+#Test hash => replace with PSD hash
 @h = {:Patrick => "monkey", :Chief => "cat", :Polly => "fish", :Smaug => "dragon"}
+
 #Check test hash for matches, and change value using dictionary
 @h.each do |k, v|
 	@csv.each do |key, value|
-		if v == key && value != ""
+		if v == key && value != nil
 			@h[k] = value 
 		end
 	end
 end
+
 ap @h
-
-
-@csv.each do |key, value|
-		@csv[key] << ", success" if @csv[key] != "" #mark CSV with successful translations
-end
-ap @csv
-#split data back out of hash into csv
-#create arr_of_arrays from csv hash
-#split "success" into own index value
-@new_csv = @csv.to_a
-#log each array as row
-
-CSV.open("trans-test_done.csv", "w", force_quotes: true) do |csv|
-  csv << @new_csv[0]
-  csv << @new_csv[1]
-  csv << @new_csv[2]
-end
 
 #Open the PSD
 #### PSD gem does not support writing to PSDs ####
