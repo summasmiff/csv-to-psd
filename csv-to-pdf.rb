@@ -10,29 +10,32 @@ require 'open-uri'
 #If successful, mark the CSV in some way
 
 #translation csv to dictionary hash
-@csv = Hash[ CSV.read('trans-test.csv').map do |row|
+@csv = Hash[ CSV.read('gold-bug-trans.csv').map do |row|
 	[ row[0].to_s, (row[1].to_s unless row[1] == nil) ] 
 	end 
 ]
 ap @csv
 
-#Extract text from PDF, convert to string.
-reader = PDF::Reader.new('trans-test.pdf')
+#Extract text from PDF, convert to an array of strings, one for each page.
+reader = PDF::Reader.new('gold-bug.pdf')
+
+text = []
 
 reader.pages.each do |page|
-	@pdf = String.new(page.text)
-	ap @pdf
+	str = String.new(page.text)
+	text.push str
 end
 
 #Translate
-@csv.each { |key, value| @pdf = @pdf.gsub(key, value) if value != nil }
-
-ap @pdf
+text.each do |i|
+	i.to_s.strip.gsub!(/\s+\n?/, ' ')
+	@csv.each { |key, value| i.to_s.gsub!(key, value) if value != nil }
+end
 
 #Write to PDF
 pdf = Prawn::Document.new
-pdf.text "#{@pdf}"
-pdf.render_file "trans-test-done.pdf"
+pdf.text "#{text.to_s.strip.gsub!(/\s+\n?/, ' ')}"
+pdf.render_file "gold-bug-done.pdf"
 
 
 
