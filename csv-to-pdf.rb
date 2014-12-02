@@ -34,7 +34,7 @@ end
 
 #Write to PDF
 pdf = Prawn::Document.new
-pdf.text "#{text.to_s.strip.gsub!(/\s+\n?/, ' ')}"
+text.each { |i| pdf.text "#{i.to_s.strip.gsub!(/\s+\n?/, ' ')}" }
 pdf.render_file "gold-bug-done.pdf"
 
 
