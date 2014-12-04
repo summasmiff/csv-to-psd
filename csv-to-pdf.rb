@@ -11,8 +11,11 @@ require 'open-uri'
 
 #translation csv to dictionary hash
 @csv = Hash[ CSV.read('gold-bug-trans.csv').map do |row|
-	[ row[0].to_s, (row[1].to_s unless row[1] == nil) ] 
-	end 
+	[ row[0].to_s, row[1].to_s ] if row.all? 
+	elsif row[0] == nil
+		@csv_report << ["failure" => row[1].to_s ]
+	else row [1] == nil
+		@csv_report << [row[0].to_s => "failure"]
 ]
 ap @csv
 
@@ -28,7 +31,7 @@ end
 
 #Translate
 text.each do |i|
-	i.to_s.strip.gsub!(/\s+\n?/, ' ')
+	#i.to_s.strip.gsub!(/\s+\n?/, ' ')
 	@csv.each { |key, value| i.to_s.gsub!(key, value) if value != nil }
 end
 
